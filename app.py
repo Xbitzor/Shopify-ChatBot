@@ -6,8 +6,8 @@ app = Flask(__name__)
 
 # Get Shopify credentials from environment variables
 SHOPIFY_STORE_URL = "https://xbitzor.shop"
-SHOPIFY_API_KEY = os.getenv("SHOPIFY_API_KEY")  # Get from Render env vars
-SHOPIFY_PASSWORD = os.getenv("SHOPIFY_PASSWORD")  # Get from Render env vars
+SHOPIFY_API_KEY = os.getenv("SHOPIFY_API_KEY")  # Get from Railway env vars
+SHOPIFY_PASSWORD = os.getenv("SHOPIFY_PASSWORD")  # Get from Railway env vars
 
 # Fetch product details from Shopify
 def get_product_details():
@@ -53,4 +53,4 @@ def chat():
     return jsonify({"response": "I'm here to help! Ask me anything about our store."})
 
 if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=10000)  # Render uses port 10000
+    port = int(os.environ.get("PORT
