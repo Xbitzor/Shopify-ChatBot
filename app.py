@@ -1,4 +1,4 @@
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, render_template
 import requests
 import os
 
@@ -36,7 +36,7 @@ def get_store_policies():
 
 @app.route("/", methods=["GET"])
 def home():
-    return "Shopify Chatbot is Running!"
+    return render_template("index.html")  # Serve chatbot UI
 
 @app.route("/chat", methods=["POST"])
 def chat():
