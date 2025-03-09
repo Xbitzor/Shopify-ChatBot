@@ -5,14 +5,14 @@ import os  # Import for environment variables
 app = Flask(__name__)
 
 # Get Shopify credentials from environment variables
-SHOPIFY_STORE_URL = "https://xbitzor.shop"
-SHOPIFY_API_KEY = os.getenv("SHOPIFY_API_KEY")  # Get from Railway env vars
-SHOPIFY_PASSWORD = os.getenv("SHOPIFY_PASSWORD")  # Get from Railway env vars
+SHOPIFY_STORE_URL = os.getenv("SHOPIFY_STORE_URL")  # Get store URL from Railway env vars
+SHOPIFY_ACCESS_TOKEN = os.getenv("SHOPIFY_ACCESS_TOKEN")  # Use access token instead of API key & password
 
 # Fetch product details from Shopify
 def get_product_details():
     url = f"{SHOPIFY_STORE_URL}/admin/api/2023-01/products.json"
-    response = requests.get(url, auth=(SHOPIFY_API_KEY, SHOPIFY_PASSWORD))
+    headers = {"X-Shopify-Access-Token": SHOPIFY_ACCESS_TOKEN}  # Use access token
+    response = requests.get(url, headers=headers)
     if response.status_code == 200:
         return response.json().get("products", [])
     return []
@@ -20,7 +20,8 @@ def get_product_details():
 # Fetch store policies from Shopify
 def get_store_policies():
     url = f"{SHOPIFY_STORE_URL}/admin/api/2023-01/policies.json"
-    response = requests.get(url, auth=(SHOPIFY_API_KEY, SHOPIFY_PASSWORD))
+    headers = {"X-Shopify-Access-Token": SHOPIFY_ACCESS_TOKEN}  # Use access token
+    response = requests.get(url, headers=headers)
     if response.status_code == 200:
         return response.json().get("policies", [])
     return []
@@ -53,4 +54,5 @@ def chat():
     return jsonify({"response": "I'm here to help! Ask me anything about our store."})
 
 if __name__ == "__main__":
-    port = int(os.environ.get("PORT
+    port = int(os.environ.get("PORT", 8080))  # Default to 8080 if no PORT is assigned
+    app.run(host="0.0.0.0", port=port)
